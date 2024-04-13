@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {Component} from 'react';
+import {Widget, addResponseMessage, addLinkSnippet, addUserMessage, setQuickButtons} from 'react-chat-widget';
+import 'react-chat-widget/lib/styles.css';
+const buttons = [{label: 'first', value: '1'}, {label: 'second', value: '2'}];
+export class App extends Component {
+  componentDidMount() {
+    addResponseMessage('Welcome to this awesome chat!');
+    setQuickButtons(buttons);
+  }
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  handleNewUserMessage = newMessage => {
+    console.log(`New message incoming! ${newMessage}`);
+    addResponseMessage('Thank you for contact!');
+    // Now send the message throught the backend API
+  };
+
+  handleQuickButtonClicked = data => {
+    console.log(data);
+    setQuickButtons(buttons.filter(button => button.value !== data));
+  };
+
+  render() {
+    return (
+      <div className="App">
+        <Widget
+          handleNewUserMessage={this.handleNewUserMessage}
+          handleQuickButtonClicked={this.handleQuickButtonClicked}
+          // profileAvatar={'text'}
+          title="Polls"
+          subtitle="Polls Demo"
+        />
+      </div>
+    );
+  }
 }
 
-export default App;
+
+export default App
